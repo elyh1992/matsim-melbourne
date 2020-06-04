@@ -33,6 +33,7 @@ import org.matsim.core.utils.geometry.transformations.TransformationFactory;
 import org.matsim.core.utils.gis.ShapeFileReader;
 import org.opengis.feature.simple.SimpleFeature;
 
+import static org.matsim.core.utils.geometry.geotools.MGC.xy2Point;
 
 
 /**
@@ -553,7 +554,7 @@ public class ZahraCreateDemandCopy {
 		do {
 			x = ft.getBounds().getMinX() + rnd.nextDouble() * (ft.getBounds().getMaxX() - ft.getBounds().getMinX());
 			y = ft.getBounds().getMinY() + rnd.nextDouble() * (ft.getBounds().getMaxY() - ft.getBounds().getMinY());
-			p = MGC.xy2Point(x, y);
+			p = xy2Point(x, y);
 		} while (((Geometry) ft.getDefaultGeometry()).contains(p));
 		return p;
 	}

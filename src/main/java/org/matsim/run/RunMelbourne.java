@@ -61,14 +61,14 @@ public class RunMelbourne {
 	static Controler prepareControler(Scenario scenario) {
 		final Controler controler = new Controler(scenario);
 
-		// add emissions:
+		/*// add emissions:
 		controler.addOverridingModule(new AbstractModule() {
 			@Override
 			public void install() {
 				bind(EmissionModule.class).asEagerSingleton();
 //				install(new NoiseModule(scenario));
 			}
-		});
+		});*/
 		
 		return controler;
 	}
@@ -95,12 +95,12 @@ public class RunMelbourne {
 //
 //		NetworkUtils.writeNetwork( scenario.getNetwork(), "net.xml.gz" ) ;
 		
-		for ( Link link : scenario.getNetwork().getLinks().values() ) {
+		/*for ( Link link : scenario.getNetwork().getLinks().values() ) {
 //			NetworkUtils.setType(link,"URB/Local/50"); // for emissions; should be more differentiated
 			// roadType is an index from roadTypeMapping file and 'URB/Local/50' is HBEFA road type.
 			// In current setup, links get indices and mapped to HBEFA road type later using 'roadTypeMapping.txt' file. (see https://matsim.atlassian.net/browse/MATSIM-785) Amit, Feb'18
 			NetworkUtils.setType(link,"43");
-		}
+		}*/
 		
 		return scenario;
 	}
@@ -116,7 +116,7 @@ public class RunMelbourne {
 			config = ConfigUtils.loadConfig("scenarios/2017-11-scenario-by-kai-from-vista/config.xml");
 			config.controler().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
 
-			config.controler().setLastIteration(0);
+			config.controler().setLastIteration(5);
 			
 			config.global().setNumberOfThreads(4);
 			config.qsim().setNumberOfThreads(4);
@@ -130,7 +130,7 @@ public class RunMelbourne {
 		
 		config.plansCalcRoute().setInsertingAccessEgressWalk(true);
 		
-		{
+	/*	{
 			StrategySettings stratSets = new StrategySettings( ) ;
 			stratSets.setStrategyName( DefaultStrategy.ReRoute );
 			stratSets.setWeight(0.1);
@@ -141,30 +141,30 @@ public class RunMelbourne {
 			stratSets.setStrategyName( DefaultSelector.ChangeExpBeta ) ;
 			stratSets.setWeight(0.9);
 			config.strategy().addStrategySettings(stratSets);
-		}
+		}*/
 		
 		config.qsim().setTrafficDynamics(TrafficDynamics.kinematicWaves);
 		
 		// ---
 		
-		EmissionsConfigGroup emissionsConfig = ConfigUtils.addOrGetModule(config, EmissionsConfigGroup.class);
+		/*EmissionsConfigGroup emissionsConfig = ConfigUtils.addOrGetModule(config, EmissionsConfigGroup.class);
 		emissionsConfig.setEmissionRoadTypeMappingFile("sample_roadTypeMapping.txt");
 		emissionsConfig.setAverageWarmEmissionFactorsFile("sample_EFA_HOT_vehcat_2005average.txt");
 		emissionsConfig.setAverageColdEmissionFactorsFile("sample_EFA_ColdStart_vehcat_2005average.txt");
 		emissionsConfig.setUsingDetailedEmissionCalculation(false);
 		emissionsConfig.setWritingEmissionsEvents(true);
-		emissionsConfig.setUsingVehicleTypeIdAsVehicleDescription(false);
+		emissionsConfig.setUsingVehicleTypeIdAsVehicleDescription(false);*/
 		
 		// one also needs to have an appropriate vehicles file:
 		
-		config.vehicles().setVehiclesFile("sample_emissionVehicles_v2.xml");
-		config.qsim().setVehiclesSource(QSimConfigGroup.VehiclesSource.modeVehicleTypesFromVehiclesData);
+		/*config.vehicles().setVehiclesFile("sample_emissionVehicles_v2.xml");
+		config.qsim().setVehiclesSource(QSimConfigGroup.VehiclesSource.modeVehicleTypesFromVehiclesData);*/
 		
 		// ---
 		
-		NoiseConfigGroup noiseConfig = ConfigUtils.addOrGetModule(config, NoiseConfigGroup.class ) ;
+		/*NoiseConfigGroup noiseConfig = ConfigUtils.addOrGetModule(config, NoiseConfigGroup.class ) ;
 		noiseConfig.setReceiverPointGap(500.);
-		noiseConfig.setWriteOutputIteration(100);
+		noiseConfig.setWriteOutputIteration(100);*/
 		
 		// === overriding config is loaded at end.  Allows to override config settings at the very end.  Could, for example, switch off kinematic waves,
 		// or set the weight of re-routing to zero.  Not really recommended, but there may be cases where this is needed. kai, jan'18
