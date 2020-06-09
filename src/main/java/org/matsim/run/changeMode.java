@@ -17,7 +17,9 @@ import java.util.List;
 public class changeMode {
 
 
+
     public static void main(String[] args) {
+        int counter=0;
         Config config;
 
         config = ConfigUtils.loadConfig("scenarios/2017-11-scenario-by-kai-from-vista/config.xml");
@@ -29,7 +31,8 @@ public class changeMode {
 
 
         for (Id<Person> personId:scenario.getPopulation().getPersons().keySet()){
-            System.out.println(personId);
+            counter++;
+          /*  System.out.println(personId);
             Person eachPerson = scenario.getPopulation().getPersons().get(personId);
             System.out.println(eachPerson);
             Plan eachPlan = eachPerson.getSelectedPlan();
@@ -47,13 +50,14 @@ public class changeMode {
 
 
 
-            }
+            }*/
         }
-        PopulationWriter populationWriter = new PopulationWriter(scenario.getPopulation());
+        System.out.println(counter);
+        /*PopulationWriter populationWriter = new PopulationWriter(scenario.getPopulation());
         populationWriter.write("D:/matsim-melbourne/scenarios/2017-11-scenario-by-kai-from-vista/plans4mode.xml.gz");
 //		new ObjectAttributesXmlWriter(this.scenarioPUS.getPopulation().getPersonAttributes()).writeFile("C:/Users/znavidikasha/Dropbox/1-PhDProject/YarraRanges/demand/zahra's/YRsPlansSubAtts.xml");
         System.out.println("writing done");
-
+*/
 
 
 

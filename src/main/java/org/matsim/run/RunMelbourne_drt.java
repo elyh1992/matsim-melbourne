@@ -57,6 +57,7 @@ public class RunMelbourne_drt {
 		config.controler().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
 		config.controler().setRoutingAlgorithmType( RoutingAlgorithmType.FastAStarLandmarks);
 		config.qsim().setTrafficDynamics(TrafficDynamics.kinematicWaves);
+		config.plansCalcRoute().setInsertingAccessEgressWalk(true);
 
 		run(config, false);
 	}
