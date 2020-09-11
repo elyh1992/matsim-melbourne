@@ -8,12 +8,14 @@ import org.opengis.feature.simple.SimpleFeature;
 
 import java.util.Random;
 
+import static org.matsim.core.gbl.Gbl.assertNotNull;
+
 public class MMUtils {
     private MMUtils() {
     } // do not instantiate
 
 	public static Point getRandomPointInFeature(Random rnd, SimpleFeature ft) {
-		Gbl.assertNotNull(ft);
+		assertNotNull(ft);
 		Point p = null;
 		double x, y;
 		// generate a random point until a point inside the feature geometry is found

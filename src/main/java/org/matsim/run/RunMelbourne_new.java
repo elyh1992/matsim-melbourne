@@ -20,51 +20,84 @@ package org.matsim.run;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.av.robotaxi.fares.drt.DrtFareModule;
-import org.matsim.contrib.av.robotaxi.fares.drt.DrtFaresConfigGroup;
-import org.matsim.contrib.drt.run.DrtControlerCreator;
-import org.matsim.contrib.drt.run.MultiModeDrtConfigGroup;
-import org.matsim.contrib.dvrp.run.DvrpConfigGroup;
 import org.matsim.core.config.Config;
+import org.matsim.core.config.ConfigGroup;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.ControlerConfigGroup.RoutingAlgorithmType;
 import org.matsim.core.config.groups.QSimConfigGroup.TrafficDynamics;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.matsim.vis.otfvis.OTFVisConfigGroup;
 
+import java.util.Arrays;
 
 /**
  * @author nagel
  *
  */
-public class RunMelbourne_drt {
-	private static final String drt_CONFIG = "scenarios/2017-11-scenario-by-kai-from-vista/config_drt.xml";
-	public static void run(Config config, boolean otfvis) {
-
-		Controler controler = DrtControlerCreator.createControlerWithSingleModeDrt(config, otfvis);
-
-
-
-		controler.addOverridingModule(new DrtFareModule());
-		controler.run();
-	}
+public class RunMelbourne_new {
+	private static final Logger log = Logger.getLogger(RunMelbourne_new.class) ;
 
 	public static void main(String[] args) {
+		for (String arg : args) {
+			log.info( arg );
+		}
 
-		Config config = ConfigUtils.loadConfig(drt_CONFIG, new MultiModeDrtConfigGroup(),
-				new DvrpConfigGroup(),
-				new OTFVisConfigGroup(), new DrtFaresConfigGroup());
+		if ( args.length==0 ) {
+			args = new String[] {"scenarios/2017-11-scenario-by-kai-from-vista/config.xml"}  ;
+		}
+		// yyyyyy increase memory!
 
+		Config config = prepareConfig(args);
 		config.controler().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
-		config.controler().setRoutingAlgorithmType( RoutingAlgorithmType.FastAStarLandmarks);
-		config.qsim().setTrafficDynamics(TrafficDynamics.kinematicWaves);
-		config.plansCalcRoute().setInsertingAccessEgressWalk(true);
+		
+		Scenario scenario = prepareScenario(config);
 
-
-		run(config, false);
+		Controler controler = prepareControler(scenario);
+		
+		controler.run();
 	}
+	
+	static Controler prepareControler(Scenario scenario) {
+		final Controler controler = new Controler(scenario);
 
+
+		
+		return controler;
+	}
+	
+	static Scenario prepareScenario(Config config) {
+		
+		final Scenario scenario = ScenarioUtils.loadScenario(config);
+		
+
+		return scenario;
+	}
+	public static Config prepareConfig(String [] args, ConfigGroup... customModules) {
+
+
+		String[] typedArgs = Arrays.copyOfRange( args, 1, args.length );
+
+
+		ConfigGroup[] customModulesAll = new ConfigGroup[customModules.length ];
+
+		int counter = 0;
+		for (ConfigGroup customModule : customModules) {
+			customModulesAll[counter] = customModule;
+			counter++;
+		}
+
+
+
+		final Config config = ConfigUtils.loadConfig( args[ 0 ], customModulesAll );
+
+
+		
+		config.qsim().setTrafficDynamics(TrafficDynamics.kinematicWaves);
+		
+
+		ConfigUtils.loadConfig(config,"overridingConfig.xml");
+		return config;
+	}
 	
 }

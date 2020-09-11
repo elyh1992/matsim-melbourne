@@ -39,16 +39,19 @@ import java.util.*;
  *
  */
 final class CreateDemandFromVISTA {
-	private static final String pusTripsFile = "data/vista/2017-11-01-vista2009/Trips_VISTA09_v3_VISTA_Online.csv" ;
-	private static final String pusPersonsFile = "data/vista/2017-11-01-vista2009/Persons_VISTA09_v3_VISTA_Online.csv" ;
-	private static final String zonesFile = "data/census/2006/shp/2017-11-08-1259030002_cd06avic_shape/CD06aVIC.shp";
+	private static final String pusTripsFile = "data/Trips_VISTA09_v3_VISTA_Online.csv" ;
+	private static final String pusPersonsFile = "data/Persons_VISTA09_v3_VISTA_Online.csv" ;
+	private static final String zonesFile = "data/CD06aVIC.shp";
 	private static final Logger log = Logger.getLogger( CreateDemandFromVISTA.class ) ;
 	
 	public static Coord createRandomCoordinateInCcdZone(Random rnd, Map<String, SimpleFeature> featureMap,
 														String ccdCode, Record record, CoordinateTransformation ct) {
 
 		// get corresponding feature:
+
 		SimpleFeature ft = featureMap.get(ccdCode) ;
+
+
 		if ( ft==null ) {
 			log.error("unknown ccdCode=" + ccdCode ); // yyyyyy look at this again
 			log.error( record.toString() );
@@ -57,7 +60,7 @@ final class CreateDemandFromVISTA {
 			double ymin = 5784843. ; double ymax = 5866000. ;
 			double yy =ymin + rnd.nextDouble()*(ymax-ymin) ;
 			return CoordUtils.createCoord( xx, yy) ;
-			
+
 //			return CoordUtils.createCoord(271704., 5784843. ) ; // dummy coordinate; should be around Geelong.  kai, nov'17
 		}
 
@@ -69,7 +72,7 @@ final class CreateDemandFromVISTA {
 		Coord coordOrigin = ct.transform(coordInOrigCRS) ;
 		return coordOrigin;
 	}
-	
+
 	public final static class Record {
 		// needs to be public, otherwise one gets some incomprehensible exception.  kai, nov'17
 

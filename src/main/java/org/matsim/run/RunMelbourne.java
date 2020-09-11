@@ -20,22 +20,15 @@ package org.matsim.run;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.emissions.EmissionModule;
-import org.matsim.contrib.emissions.utils.EmissionsConfigGroup;
-import org.matsim.contrib.noise.NoiseConfigGroup;
+import org.matsim.contrib.av.robotaxi.fares.drt.DrtFaresConfigGroup;
+import org.matsim.contrib.drt.run.MultiModeDrtConfigGroup;
+import org.matsim.contrib.dvrp.run.DvrpConfigGroup;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.ControlerConfigGroup.RoutingAlgorithmType;
-import org.matsim.core.config.groups.QSimConfigGroup;
 import org.matsim.core.config.groups.QSimConfigGroup.TrafficDynamics;
-import org.matsim.core.config.groups.StrategyConfigGroup.StrategySettings;
-import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
-import org.matsim.core.network.NetworkUtils;
-import org.matsim.core.replanning.strategies.DefaultPlanStrategiesModule.DefaultSelector;
-import org.matsim.core.replanning.strategies.DefaultPlanStrategiesModule.DefaultStrategy;
 import org.matsim.core.scenario.ScenarioUtils;
 
 /**
@@ -47,7 +40,7 @@ public class RunMelbourne {
 
 	public static void main(String[] args) {
 		// yyyyyy increase memory!
-		
+
 		Config config = prepareConfig(args);
 		config.controler().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
 		
@@ -116,11 +109,11 @@ public class RunMelbourne {
 			config = ConfigUtils.loadConfig("scenarios/2017-11-scenario-by-kai-from-vista/config.xml");
 			config.controler().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
 
-			config.controler().setLastIteration(5);
+			/*config.controler().setLastIteration(5);
 			
 			config.global().setNumberOfThreads(4);
 			config.qsim().setNumberOfThreads(4);
-			config.qsim().setEndTime(36.*3600.);
+			config.qsim().setEndTime(36.*3600.);*/
 			
 			// === default config end
 		}
@@ -171,5 +164,6 @@ public class RunMelbourne {
 		ConfigUtils.loadConfig(config,"overridingConfig.xml");
 		return config;
 	}
-	
+
+
 }
