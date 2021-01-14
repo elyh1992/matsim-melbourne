@@ -20,12 +20,12 @@ import org.matsim.core.scenario.ScenarioUtils;
 public class CreateTaxiVehicles {
     public static void main(String[] args) {
         Scenario scenario = ScenarioUtils.createScenario(ConfigUtils.createConfig());
-        int numberofVehicles = 5000;
+        int numberofVehicles = 1000;
         double operationStartTime = 0.; //t0
-        double operationEndTime = 36*3600.;	//t1
+        double operationEndTime = 24*3600.;	//t1
         int seats = 4;
         String networkfile = "C:/Users/ehajhashemi/Desktop/Files/MATSim codes/matsim-melbourne/scenarios/2017-11-scenario-by-kai-from-vista/net.xml";
-        String taxisFile = "C:/Users/ehajhashemi/Desktop/Files/MATSim codes/matsim-melbourne/scenarios/2017-11-scenario-by-kai-from-vista/taxis_"+seats+".xml";
+        String taxisFile = "C:/Users/ehajhashemi/Desktop/Files/MATSim codes/matsim-melbourne/scenarios/2017-11-scenario-by-kai-from-vista/taxi_"+seats+"_1000.xml";
         List<DvrpVehicleSpecification> vehicles = new ArrayList<>();
         Random random = MatsimRandom.getLocalInstance();
         new MatsimNetworkReader(scenario.getNetwork()).readFile(networkfile);

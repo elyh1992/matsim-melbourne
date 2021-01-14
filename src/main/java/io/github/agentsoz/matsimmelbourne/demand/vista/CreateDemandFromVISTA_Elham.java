@@ -4,6 +4,9 @@ import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import io.github.agentsoz.matsimmelbourne.utils.MMUtils;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.apache.log4j.Logger;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
@@ -29,6 +32,9 @@ import org.opengis.feature.simple.SimpleFeature;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -37,31 +43,42 @@ import java.util.*;
  * @author (of documentation) kainagel
  *
  */
-final class CreateDemandFromVISTA_Elham {
-	private static final String pusTripsFile = "data/Trips_VISTA09_v3_VISTA_Online.csv" ;
-	private static final String pusPersonsFile = "data/Persons_VISTA09_v3_VISTA_Online.csv" ;
-	private static final String zonesFile = "data/CD06aVIC.shp";
+final class CreateDemandFromVISTA_Elham<csvFormat> {
+	private static final String pusPersonsFile = "data/P_changed.csv" ;
+	private static final String pusTripsFile = "data/T_changed.csv" ;
+
+	private static final String zonesFile = "data/SA1_2016_AUST.shp";
 	private static final Logger log = Logger.getLogger( CreateDemandFromVISTA_Elham.class ) ;
+	private static int counter = 0;
+
+
 
 	public static Coord createRandomCoordinateInCcdZone(Random rnd, Map<String, SimpleFeature> featureMap,
-														String ccdCode, Record record, CoordinateTransformation ct) {
+														String SA1, Record record, CoordinateTransformation ct) {
+
+
 
 		// get corresponding feature:
 
-		SimpleFeature ft = featureMap.get(ccdCode) ;
+		SimpleFeature ft = featureMap.get(SA1) ;
+
 
 
 		if ( ft==null ) {
-			log.error("unknown ccdCode=" + ccdCode ); // yyyyyy look at this again
+			log.error("unknown SA1=" + SA1 ); // yyyyyy look at this again
 			log.error( record.toString() );
 			double xmin = 271704. ; double xmax = 421000. ;
 			double xx = xmin + rnd.nextDouble()*(xmax-xmin) ;
 			double ymin = 5784843. ; double ymax = 5866000. ;
 			double yy =ymin + rnd.nextDouble()*(ymax-ymin) ;
+			counter++;
+			System.out.println(counter);
 			return CoordUtils.createCoord( xx, yy) ;
+
 
 //			return CoordUtils.createCoord(271704., 5784843. ) ; // dummy coordinate; should be around Geelong.  kai, nov'17
 		}
+
 
 		// get random coordinate in feature:
 		Point point = MMUtils.getRandomPointInFeature(rnd, ft) ;
@@ -72,35 +89,47 @@ final class CreateDemandFromVISTA_Elham {
 		return coordOrigin;
 	}
 
+
+
+
 	public final static class Record {
 		// needs to be public, otherwise one gets some incomprehensible exception.  kai, nov'17
 
 		@CsvBindByName private String TRIPID ;
 		@CsvBindByName private String PERSID ;
-		@CsvBindByName private String ORIGSLA ;
-		@CsvBindByName private String ORIGCCD ;
-		@CsvBindByName private String DESTCCD ;
-		@CsvBindByName private String DESTSLA ;
+		@CsvBindByName private String ORIGLGA;
+		@CsvBindByName private String ORIGSA1;
+		@CsvBindByName private String DESTSA1;
+		@CsvBindByName private String DESTLGA;
 		@CsvBindByName private String ORIGPURP1 ;
 		@CsvBindByName private String DESTPURP1 ;
 		@CsvBindByName(column="STARTIME") private String trip_start_time ;
 		@CsvBindByName private String DEPTIME ;
 		@CsvBindByName private String Mode_Group ;
+		/*@CsvBindByName private String AGE ;*/
+		/*@CsvBindByName private String CARLICENCE ;*/
+
+
 
 		@Override public String toString() {
 			return this.PERSID
+
 					+ "\t" + this.TRIPID
-					+ "\t" + this.ORIGSLA
-					+ "\t" + this.ORIGCCD
+					+ "\t" + this.ORIGLGA
+					+ "\t" + this.ORIGSA1
 					+ "\t" + this.ORIGPURP1
 					+ "\t" + this.trip_start_time
 					+ "\t" + this.Mode_Group
-					+ "\t" + this.DESTSLA
-					+ "\t" + this.DESTCCD
+					+ "\t" + this.DESTLGA
+					+ "\t" + this.DESTSA1
 					+ "\t" + this.DESTPURP1
 					+ "\t" + this.DEPTIME;
+			       /* + "\t" + this.AGE*/
+			        /*+ "\t" + this.CARLICENCE;*/
+
 		}
 	}
+
 
 	private final Scenario scenario;
 	private final ArrayList<Id<Person>> activePeople = new ArrayList<>();
@@ -112,16 +141,18 @@ final class CreateDemandFromVISTA_Elham {
 
 	Random random = new Random(4711) ;
 
-	CreateDemandFromVISTA_Elham() {
+	CreateDemandFromVISTA_Elham() throws IOException {
 		this.scenario = ScenarioUtils.createScenario(ConfigUtils.createConfig());
 	}
 
 	public void run() throws IOException {
 		this.createPUSPersons();// create all the people and add a plan to each
 		this.createPUSPlans();// create the plans according to the trip files (pusTripsFile)
-		//		this.matchFirstAndLastAct();// add a trip to the end or beginning of the plan to match the first and last activity to have a tour based plan
-		//		this.matchHomeCoord(); //since in adding the activities the coordinates have been randomised in for each destination, agents have different home locations, this method is need to set all the home location to a single one. 
+		this.removeNonActivePeople();//remove the people who has no trip
+		this.matchFirstAndLastAct();// add a trip to the end or beginning of the plan to match the first and last activity to have a tour based plan
+		this.matchHomeCoord(); //since in adding the activities the coordinates have been randomised in for each destination, agents have different home locations, this method is need to set all the home location to a single one.
 		this.populationWriting();
+
 	}
 
 	private void createPUSPersons() {
@@ -131,6 +162,8 @@ final class CreateDemandFromVISTA_Elham {
 		Population population = this.scenario.getPopulation();   
 		PopulationFactory populationFactory = population.getFactory();
 
+
+
 		/*
 		 * Read the PUS file
 		 */
@@ -138,6 +171,13 @@ final class CreateDemandFromVISTA_Elham {
 			bufferedReader.readLine(); //skip header
 
 			int index_personId = 0;
+			int index_age = 7;
+			int index_sex = 82; //when male 1 when woman 0
+			int CarAvailability_index= 83;
+			int totalvehs_index= 78;
+			int num_cars_index= 79;
+			int hhinc_index = 80;
+			int hhsize_index = 81;
 
 			String line;
 			while ((line = bufferedReader.readLine()) != null) {
@@ -146,7 +186,16 @@ final class CreateDemandFromVISTA_Elham {
 				 * Create a person and add it to the population
 				 */
 				Person person = populationFactory.createPerson(Id.create(parts[index_personId].trim(), Person.class));
+				person.getAttributes().putAttribute("age", parts[index_age].trim());
+				person.getAttributes().putAttribute("sex", parts[index_sex].trim());
+				person.getAttributes().putAttribute("CarAvailability", parts[CarAvailability_index].trim());
+				person.getAttributes().putAttribute("totalVehs", parts[totalvehs_index].trim());
+				person.getAttributes().putAttribute("numCars", parts[num_cars_index].trim());
+				person.getAttributes().putAttribute("hhIncome", parts[hhinc_index].trim());
+				person.getAttributes().putAttribute("hhSize", parts[hhsize_index].trim());
+
 				population.addPerson(person);
+
 				/*
 				 * Create a day plan and add it to the person
 				 */
@@ -188,7 +237,7 @@ final class CreateDemandFromVISTA_Elham {
 				// get feature
 				SimpleFeature ft = it.next(); //A feature contains a geometry (in this case a polygon) and an arbitrary number
 
-				featureMap.put( (String) ft.getAttribute("CD_CODE06") , ft ) ;
+				featureMap.put( (String) ft.getAttribute("SA1_MAIN16") , ft ) ;
 			}
 			it.close();
 		} catch ( Exception ee ) {
@@ -211,6 +260,9 @@ final class CreateDemandFromVISTA_Elham {
 				Record record = it.next() ;
 				Id<Person> personId = Id.createPersonId(record.PERSID);
 				Person person = population.getPersons().get(personId);
+
+				/*person.getAttributes().putAttribute("age", record.AGE);
+				person.getAttributes().putAttribute("license", record.CARLICENCE);*/
 				Gbl.assertNotNull(person);
 				Plan plan = person.getSelectedPlan();
 				Gbl.assertNotNull(plan);
@@ -218,7 +270,7 @@ final class CreateDemandFromVISTA_Elham {
 				if (!personId.equals(previousPersonId) ) { // a new person
 
 					//add the original place
-					coordOrigin = createRandomCoordinateInCcdZone(rnd, featureMap, record.ORIGCCD.trim(), record, ct );
+					coordOrigin = createRandomCoordinateInCcdZone(rnd, featureMap, record.ORIGSA1.trim(), record, ct );
 
 					final String actType = record.ORIGPURP1.trim();
 					activityTypes.add(actType) ; 
@@ -239,6 +291,150 @@ final class CreateDemandFromVISTA_Elham {
 
 		System.out.println("plnas done");
 	}// end of createPUSPlans
+	private void removeNonActivePeople(){
+		try {
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(pusPersonsFile));
+			bufferedReader.readLine(); //skip header
+
+			int index_personId = 0;
+
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				String parts[] = line.split(",");
+
+				Id<Person> checkPersonId = Id.create(parts[index_personId].trim(), Person.class);
+
+				if (this.scenario.getPopulation().getPersons().get(checkPersonId).getSelectedPlan().getPlanElements().isEmpty())
+				{
+					this.scenario.getPopulation().getPersons().remove(checkPersonId);
+				}
+				else
+				{
+					activePeople.add(checkPersonId);
+				}
+			}
+			bufferedReader.close();
+		} // end try
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("removing done");
+	}
+	public void matchFirstAndLastAct()
+	{
+		Population population = this.scenario.getPopulation();
+		PopulationFactory populationFactory = population.getFactory();
+
+		for (int i = 0 ; i < activePeople.size() ; i++)
+		{
+			Person eachPerson = this.scenario.getPopulation().getPersons().get(activePeople.get(i));
+			Plan eachPlan = eachPerson.getSelectedPlan();
+			int NoOfPlans = eachPlan.getPlanElements().size() - 1;
+			Activity currentFirstAct = (Activity) eachPlan.getPlanElements().get(0);
+			Activity currentLastAct = (Activity) eachPlan.getPlanElements().get(NoOfPlans) ;
+			String currentFirstActType = currentFirstAct.getType().toString().trim();
+			String currentLastActType = currentLastAct.getType().toString().trim();
+			Leg leg = (Leg) eachPlan.getPlanElements().get(1);
+
+			//to make a different acts
+			String actType = "";
+			Coord newActCoord = new Coord(0, 0);
+			Activity newAct = populationFactory.createActivityFromCoord(actType, newActCoord);
+
+
+			if (!(currentFirstActType.equals(currentLastActType)))
+			{
+				//if the first act is home make the last act home too
+				if (currentFirstActType.equals("At or Go Home"))
+				{
+					actType = currentFirstAct.getType();
+					newActCoord = new Coord(currentFirstAct.getCoord().getX(), currentFirstAct.getCoord().getY());
+					newAct = populationFactory.createActivityFromCoord(actType, newActCoord);
+
+					Activity secondLast = (Activity) eachPlan.getPlanElements().get(NoOfPlans - 2);
+					String secondLastActType = secondLast.getType().toString().trim();
+
+
+					currentLastAct.setEndTime(secondLast.getEndTime() + 18000);
+					if (currentLastAct.getEndTime() > 129600)
+					{
+						System.out.println( eachPerson.getId());
+						currentLastAct.setEndTime(129600);
+					}
+
+					eachPlan.getPlanElements().add(populationFactory.createLeg(leg.getMode()));
+					eachPlan.getPlanElements().add(newAct);
+				}
+
+				// match the first act with last
+				else
+				{
+					actType = currentLastAct.getType();
+					newActCoord = new Coord(currentLastAct.getCoord().getX(), currentLastAct.getCoord().getY());
+					newAct = populationFactory.createActivityFromCoord(actType, newActCoord);
+					eachPlan.getPlanElements().add(0, newAct);
+					eachPlan.getPlanElements().add(1, populationFactory.createLeg(leg.getMode()));
+
+					Activity newFirstAct = (Activity) eachPlan.getPlanElements().get(0);
+					Activity timeRefAct = (Activity) eachPlan.getPlanElements().get(2);
+					String timeRefActType = timeRefAct.getType().toString().trim();
+
+
+					newFirstAct.setEndTime(timeRefAct.getEndTime() - 18000);
+
+					//if after the process start time of a trip is minus, it will be set to 04:00am which is the earliest travel in vista trips
+					if (newFirstAct.getEndTime() < 0)
+					{
+						System.out.println( eachPerson.getId());
+						newFirstAct.setEndTime(14400);
+					}
+				}
+			}
+		}
+		System.out.println("matching done");
+
+	}
+
+	public void matchHomeCoord()
+	{
+		Population population = this.scenario.getPopulation();
+		PopulationFactory populationFactory = population.getFactory();
+
+		for (int i = 0 ; i < activePeople.size() ; i++)
+		{
+			Coord homeCoord = new Coord(0,0);
+			Person eachPerson = this.scenario.getPopulation().getPersons().get(activePeople.get(i));
+			Plan eachPlan = eachPerson.getSelectedPlan();
+			int NoOfPlans = eachPlan.getPlanElements().size();
+			System.out.println(NoOfPlans + " ID is " + activePeople.get(i));
+			for (int j = 0 ; j < NoOfPlans ; j+=2)
+			{
+				Activity activityToCheck = (Activity) eachPlan.getPlanElements().get(j);
+				String activityToCheckType = activityToCheck.getType().toString().trim();
+				System.out.println(activityToCheckType + " coor is " + activityToCheck.getCoord());
+				if (activityToCheckType.equals("At or Go Home"))
+				{
+					homeCoord = activityToCheck.getCoord();
+				    break;
+				}
+			}
+
+			for (int k = 0 ; k < NoOfPlans ; k+=2)
+			{
+				Activity activityToCheck = (Activity) eachPlan.getPlanElements().get(k);
+				String activityToCheckType = activityToCheck.getType().toString().trim();
+				if (activityToCheckType.equals("At or Go Home"))
+				{
+					activityToCheck.setCoord(homeCoord);
+				}
+
+			}
+			System.out.println(homeCoord);
+
+		}
+	}
+
 
 	private double fuzzifiedTimeInSecs(final String time) {
 		return 60. * Double.parseDouble( time ) + (random.nextDouble()-0.5)*1800.;
@@ -248,14 +444,26 @@ final class CreateDemandFromVISTA_Elham {
 							   Record record, Plan plan) {
 		// and the first travel leg
 		String mode = record.Mode_Group;
-		if ( "Vehicle Driver".equals(mode) ) {
+		if ( "Vehicle Driver".equals(mode) || "Other".equals(mode) ) {
 			mode = TransportMode.car ; // not necessary, but easier to use the matsim default.  kai, nov'17
+		}
+		else if ("Bus".equals(mode) || "Tram".equals(mode) || "Train".equals(mode)){
+			mode = TransportMode.pt ;
+		}
+		else if ("Bicycle".equals(mode)){
+			mode = TransportMode.bike ;
+		}
+		else if ("Walking".equals(mode)){
+			mode = TransportMode.walk ;
+		}
+		else if ("Vehicle Passenger".equals(mode)){
+			mode = TransportMode.ride;
 		}
 		modes.add(mode) ;
 		plan.addLeg(pf.createLeg(mode));
 
 		// add the destination
-		Coord coordDestination = createRandomCoordinateInCcdZone(rnd, featureMap, record.DESTCCD.trim(), record, ct );
+		Coord coordDestination = createRandomCoordinateInCcdZone(rnd, featureMap, record.DESTSA1.trim(), record, ct );
 		String activityType = record.DESTPURP1.trim();
 		activityTypes.add(activityType) ;
 		Activity activity1 = pf.createActivityFromCoord(activityType, coordDestination);

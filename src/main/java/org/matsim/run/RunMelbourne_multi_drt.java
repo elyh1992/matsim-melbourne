@@ -34,6 +34,7 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.ControlerConfigGroup.RoutingAlgorithmType;
 import org.matsim.core.config.groups.QSimConfigGroup.TrafficDynamics;
+import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
 import org.matsim.core.population.routes.RouteFactories;
@@ -52,7 +53,7 @@ public class RunMelbourne_multi_drt {
 		}
 
 		if ( args.length==0 ) {
-			args = new String[] {"scenarios/2017-11-scenario-by-kai-from-vista/config_drt.xml"}  ;
+			args = new String[] {"scenarios/2017-11-scenario-by-kai-from-vista/updated_config_drt.xml"}  ;
 		}
 		// yyyyyy increase memory!
 
@@ -73,6 +74,15 @@ public class RunMelbourne_multi_drt {
 		controler.addOverridingModule(new DvrpModule());
 		controler.configureQSimComponents(DvrpQSimComponents.activateAllModes(MultiModeDrtConfigGroup.get(controler.getConfig())));
 		controler.addOverridingModule(new DrtFareModule());
+
+	/*	MelbournePlanScoringFunctionFactory initialPlanScoringFuctionFactory = new MelbournePlanScoringFunctionFactory(controler.getScenario());
+		controler.addOverridingModule(new AbstractModule() {
+			@Override
+			public void install() {
+				this.bindScoringFunctionFactory().toInstance(initialPlanScoringFuctionFactory);
+			}
+		});*/
+
 
 
 		return controler;

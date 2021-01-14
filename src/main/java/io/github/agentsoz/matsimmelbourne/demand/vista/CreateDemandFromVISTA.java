@@ -43,7 +43,7 @@ final class CreateDemandFromVISTA {
 	private static final String pusPersonsFile = "data/Persons_VISTA09_v3_VISTA_Online.csv" ;
 	private static final String zonesFile = "data/CD06aVIC.shp";
 	private static final Logger log = Logger.getLogger( CreateDemandFromVISTA.class ) ;
-	
+	private static int counter = 0;
 	public static Coord createRandomCoordinateInCcdZone(Random rnd, Map<String, SimpleFeature> featureMap,
 														String ccdCode, Record record, CoordinateTransformation ct) {
 
@@ -59,6 +59,8 @@ final class CreateDemandFromVISTA {
 			double xx = xmin + rnd.nextDouble()*(xmax-xmin) ;
 			double ymin = 5784843. ; double ymax = 5866000. ;
 			double yy =ymin + rnd.nextDouble()*(ymax-ymin) ;
+			counter++;
+			System.out.println(counter);
 			return CoordUtils.createCoord( xx, yy) ;
 
 //			return CoordUtils.createCoord(271704., 5784843. ) ; // dummy coordinate; should be around Geelong.  kai, nov'17

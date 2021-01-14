@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE config SYSTEM "http://www.matsim.org/files/dtd/config_v2.dtd">
+<config>
+
+	<!-- ====================================================================== -->
+	<module name="network" >
+		<param name="inputNetworkFile" value="net-HOV.xml" />
+	</module>
+	<!-- ====================================================================== -->
+	<module name="plans" >
+		<!--<param name="inputPlansFile" value="plans-file-new-29-nov.xml.gz" />-->
+		<!--<param name="inputPlansFile" value="output_plans.xml" />-->
+		<param name="inputPlansFile" value="output_plans.xml" />
+	</module>
+
+
+	<!-- ====================================================================== -->
+	<module name="qsim" >
+		<param name="flowCapacityFactor" value="0.01" />
+		<param name="storageCapacityFactor" value="0.01" />
+		<param name="startTime" value="00:00:00" />
+		<param name="endTime" value="36:00:00" />
+		<param name="simStarttimeInterpretation" value="onlyUseStarttime"/>
+		<param name="insertingWaitingVehiclesBeforeDrivingVehicles"
+			   value="true" />
+
+		<param name = "snapshotStyle"	value = "queue"/>
+	</module>
+	<!-- ====================================================================== -->
+	<module name="controler" >
+		<param name="overwriteFiles" value="deleteDirectoryIfExists" />
+		<param name="firstIteration" value="0" />
+		<param name="lastIteration" value="150" />
+		<param name="writeEventsInterval" value="10" />
+	</module>
+
+	<module name="global" >
+		<param name="numberOfThreads" value="6" />
+	</module>
+	<!-- ====================================================================== -->
+
+	<module name="planCalcScore" >
+
+		<!-- write a plans file in each iteration directory which contains what each agent actually did, and the score it received. -->
+		<param name="writeExperiencedPlans" value="false" />
+
+		<parameterset type="scoringParameters" >
+			<param name="earlyDeparture" value="-0.0" />
+			<param name="lateArrival" value="-6.42" />
+			<param name="marginalUtilityOfMoney" value="1.0" />
+			<param name="performing" value="2.14" />
+			<param name="subpopulation" value="null" />
+			<param name="utilityOfLineSwitch" value="-1.0" />
+			<param name="waiting" value="-0.0" />
+			<param name="waitingPt" value="-6.0" />
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="dummy" />
+				<param name="typicalDuration" value="02:00:00" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="car interaction" />
+				<param name="scoringThisActivityAtAll" value="false" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="pt interaction" />
+				<param name="scoringThisActivityAtAll" value="false" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="bike interaction" />
+				<param name="scoringThisActivityAtAll" value="false" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="other interaction" />
+				<param name="scoringThisActivityAtAll" value="false" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="walk interaction" />
+				<param name="scoringThisActivityAtAll" value="false" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Accompany Someone" />
+				<param name="typicalDuration" value="7200" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="At or Go Home" />
+				<param name="typicalDuration" value="36000" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Buy Something" />
+				<param name="typicalDuration" value="3600" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Change Mode" />
+				<param name="scoringThisActivityAtAll" value="false" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Education" />
+				<param name="typicalDuration" value="7200" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Not Stated" />
+				<param name="typicalDuration" value="3600" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Go Home" />
+				<param name="typicalDuration" value="36000" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Other Purpose" />
+				<param name="typicalDuration" value="3600" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Personal Business" />
+				<param name="typicalDuration" value="7200" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Pick-up or Deliver Something" />
+				<param name="typicalDuration" value="1800" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Pick-up or Drop-off Someone" />
+				<param name="typicalDuration" value="1800" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Recreational" />
+				<param name="typicalDuration" value="10800" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Social" />
+				<param name="typicalDuration" value="10800" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Unknown purpose (at start of day)" />
+				<param name="typicalDuration" value="36000" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+
+			<parameterset type="activityParams" >
+				<param name="activityType" value="Work Related" />
+				<param name="typicalDuration" value="36000" />
+				<param name="typicalDurationScoreComputation" value="relative" />
+			</parameterset>
+			<parameterset type="activityParams" >
+				<param name="activityType" value="ridesplitting interaction" />
+				<param name="scoringThisActivityAtAll" value="false" />
+			</parameterset>
+			<parameterset type="activityParams" >
+				<param name="activityType" value="ridesourcing interaction" />
+				<param name="scoringThisActivityAtAll" value="false" />
+			</parameterset>
+
+			<parameterset type="modeParams" >
+
+				<!-- [utils] alternative-specific constant.  no guarantee that this is used anywhere. default=0 to be backwards compatible for the time being -->
+				<param name="constant" value="-3.5" />
+
+				<!-- [utils/m] utility of walking per m, normally negative.  this is on top of the time (dis)utility. -->
+				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
+
+				<!-- [utils/hr] additional marginal utility of traveling.  normally negative.  this comes on top of the opportunity cost of time -->
+				<param name="marginalUtilityOfTraveling_util_hr" value="-0.98" />
+				<param name="dailyUtilityConstant" value="0.0" />
+				<param name="dailyMonetaryConstant" value="-4.0" />
+
+				<param name="mode" value="pt" />
+
+				<!-- [unit_of_money/m] conversion of distance into money. Normally negative. -->
+				<param name="monetaryDistanceRate" value="0.0" />
+			</parameterset>
+
+			<parameterset type="modeParams" >
+
+				<!-- [utils] alternative-specific constant.  no guarantee that this is used anywhere. default=0 to be backwards compatible for the time being -->
+				<param name="constant" value="-0.0" />
+
+				<!-- [utils/m] utility of walking per m, normally negative.  this is on top of the time (dis)utility. -->
+				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
+
+				<!-- [utils/hr] additional marginal utility of traveling.  normally negative.  this comes on top of the opportunity cost of time -->
+				<param name="marginalUtilityOfTraveling_util_hr" value="-2.43" />
+
+				<param name="mode" value="walk" />
+
+				<!-- [unit_of_money/m] conversion of distance into money. Normally negative. -->
+				<param name="monetaryDistanceRate" value="0.0" />
+			</parameterset>
+
+
+
+			<parameterset type="modeParams" >
+
+				<!-- [utils] alternative-specific constant.  no guarantee that this is used anywhere. default=0 to be backwards compatible for the time being -->
+				<param name="constant" value="-2.0" />
+
+				<!-- [utils/m] utility of walking per m, normally negative.  this is on top of the time (dis)utility. -->
+				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
+
+				<!-- [utils/hr] additional marginal utility of traveling.  normally negative.  this comes on top of the opportunity cost of time -->
+				<param name="marginalUtilityOfTraveling_util_hr" value="-6.64" />
+
+				<param name="mode" value="bike" />
+
+				<!-- [unit_of_money/m] conversion of distance into money. Normally negative. -->
+				<param name="monetaryDistanceRate" value="0.0" />
+			</parameterset>
+
+			<parameterset type="modeParams" >
+
+				<!-- [utils] alternative-specific constant.  no guarantee that this is used anywhere. default=0 to be backwards compatible for the time being -->
+				<param name="constant" value="0.0" />
+
+				<!-- [utils/m] utility of walking per m, normally negative.  this is on top of the time (dis)utility. -->
+				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
+
+				<!-- [utils/hr] additional marginal utility of traveling.  normally negative.  this comes on top of the opportunity cost of time -->
+				<param name="marginalUtilityOfTraveling_util_hr" value="-0.0" />
+
+				<param name="mode" value="ride" />
+
+				<!-- [unit_of_money/m] conversion of distance into money. Normally negative. -->
+				<param name="monetaryDistanceRate" value="-0.000176" />
+			</parameterset>
+
+
+			<parameterset type="modeParams" >
+
+				<!-- [utils] alternative-specific constant.  no guarantee that this is used anywhere. default=0 to be backwards compatible for the time being -->
+				<param name="constant" value="0.0" />
+
+				<!-- [utils/m] utility of walking per m, normally negative.  this is on top of the time (dis)utility. -->
+				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
+
+				<!-- [utils/hr] additional marginal utility of traveling.  normally negative.  this comes on top of the opportunity cost of time -->
+				<param name="marginalUtilityOfTraveling_util_hr" value="-0.0" />
+
+				<param name="mode" value="car" />
+
+				<!-- [unit_of_money/m] conversion of distance into money. Normally negative. -->
+				<param name="monetaryDistanceRate" value="-0.000176" />
+			</parameterset>
+			<parameterset type="modeParams" >
+
+				<!-- [utils] alternative-specific constant.  no guarantee that this is used anywhere. default=0 to be backwards compatible for the time being -->
+				<param name="constant" value="0.0" />
+
+				<!-- [utils/m] utility of walking per m, normally negative.  this is on top of the time (dis)utility. -->
+				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
+
+				<!-- [utils/hr] additional marginal utility of traveling.  normally negative.  this comes on top of the opportunity cost of time -->
+				<param name="marginalUtilityOfTraveling_util_hr" value="-0.98" />
+
+				<param name="mode" value="ridesourcing" />
+
+				<!-- [unit_of_money/m] conversion of distance into money. Normally negative. -->
+				<param name="monetaryDistanceRate" value="0.0" />
+			</parameterset>
+			<parameterset type="modeParams" >
+
+				<!-- [utils] alternative-specific constant.  no guarantee that this is used anywhere. default=0 to be backwards compatible for the time being -->
+				<param name="constant" value="0.0" />
+
+				<!-- [utils/m] utility of walking per m, normally negative.  this is on top of the time (dis)utility. -->
+				<param name="marginalUtilityOfDistance_util_m" value="0.0" />
+
+				<!-- [utils/hr] additional marginal utility of traveling.  normally negative.  this comes on top of the opportunity cost of time -->
+				<param name="marginalUtilityOfTraveling_util_hr" value="-0.98" />
+
+				<param name="mode" value="ridesplitting" />
+
+				<!-- [unit_of_money/m] conversion of distance into money. Normally negative. -->
+				<param name="monetaryDistanceRate" value="0.0" />
+			</parameterset>
+		</parameterset>
+	</module>
+
+<!-- ====================================================================== -->
+
+	<module name="planscalcroute" >
+
+		<!-- All the modes for which the router is supposed to generate network routes (like car) -->
+		<param name="networkModes" value="car" />
+
+		<parameterset type="teleportedModeParameters" >
+			<param name="beelineDistanceFactor" value="1.3" />
+			<param name="mode" value="bike" />
+
+			<!-- Free-speed factor for a teleported mode. Travel time = teleportedModeFreespeedFactor * <freespeed car travel time>. Insert a line like this for every such mode. Please do not set teleportedModeFreespeedFactor as well as teleportedModeSpeed for the same mode, but if you do, +teleportedModeFreespeedFactor wins over teleportedModeSpeed. -->
+			<param name="teleportedModeFreespeedFactor" value="null" />
+
+			<!-- Speed for a teleported mode. Travel time = (<beeline distance> * beelineDistanceFactor) / teleportedModeSpeed. Insert a line like this for every such mode. -->
+			<param name="teleportedModeSpeed" value="3.1388889" />
+		</parameterset>
+
+		<parameterset type="teleportedModeParameters" >
+			<param name="beelineDistanceFactor" value="null" />
+			<param name="mode" value="ride" />
+
+			<!-- Free-speed factor for a teleported mode. Travel time = teleportedModeFreespeedFactor * <freespeed car travel time>. Insert a line like this for every such mode. Please do not set teleportedModeFreespeedFactor as well as teleportedModeSpeed for the same mode, but if you do, +teleportedModeFreespeedFactor wins over teleportedModeSpeed. -->
+			<param name="teleportedModeFreespeedFactor" value="1.0" />
+
+			<!-- Speed for a teleported mode. Travel time = (<beeline distance> * beelineDistanceFactor) / teleportedModeSpeed. Insert a line like this for every such mode. -->
+			<param name="teleportedModeSpeed" value="null" />
+		</parameterset>
+
+		<parameterset type="teleportedModeParameters" >
+			<param name="beelineDistanceFactor" value="1.3" />
+			<param name="mode" value="pt" />
+
+			<!-- Free-speed factor for a teleported mode. Travel time = teleportedModeFreespeedFactor * <freespeed car travel time>. Insert a line like this for every such mode. Please do not set teleportedModeFreespeedFactor as well as teleportedModeSpeed for the same mode, but if you do, +teleportedModeFreespeedFactor wins over teleportedModeSpeed. -->
+			<param name="teleportedModeFreespeedFactor" value="3.0" />
+
+			<!-- Speed for a teleported mode. Travel time = (<beeline distance> * beelineDistanceFactor) / teleportedModeSpeed. Insert a line like this for every such mode. -->
+			<param name="teleportedModeSpeed" value="null" />
+		</parameterset>
+		<parameterset type="teleportedModeParameters" >
+			<param name="beelineDistanceFactor" value="1.3" />
+			<param name="mode" value="walk" />
+
+			<!-- Free-speed factor for a teleported mode. Travel time = teleportedModeFreespeedFactor * <freespeed car travel time>. Insert a line like this for every such mode. Please do not set teleportedModeFreespeedFactor as well as teleportedModeSpeed for the same mode, but if you do, +teleportedModeFreespeedFactor wins over teleportedModeSpeed. -->
+			<param name="teleportedModeFreespeedFactor" value="null" />
+
+			<!-- Speed for a teleported mode. Travel time = (<beeline distance> * beelineDistanceFactor) / teleportedModeSpeed. Insert a line like this for every such mode. -->
+			<param name="teleportedModeSpeed" value="1.0555556" />
+		</parameterset>
+
+	</module>
+	<module name="strategy">
+		<param name="fractionOfIterationsToDisableInnovation" value="0.8" />
+		<parameterset type="strategysettings">
+			<param name="strategyName" value="ChangeExpBeta" />
+			<param name="weight" value="0.85" />
+		</parameterset>
+
+		<parameterset type="strategysettings">
+			<param name="strategyName" value="SubtourModeChoice" />
+			<param name="weight" value="0.05" />
+		</parameterset>
+
+		<parameterset type="strategysettings">
+			<param name="strategyName" value="ReRoute" />
+			<param name="weight" value="0.05" />
+		</parameterset>
+	</module>
+	<module name="subtourModeChoice">
+		<param name="chainBasedModes" value="car, bike" />
+		<param name="considerCarAvailability" value="true" />
+		<param name="modes" value="ridesplitting, ridesourcing, car,bike, walk, pt" />
+
+	</module>
+	<module name="multiModeDrt">
+		<parameterset type="drt">
+			<!-- If true, the startLink is changed to last link in the current schedule, so the taxi starts the next day at the link where it stopped operating the day before. False by default. -->
+			<param name="changeStartLinkToLastLinkInSchedule" value="true" />
+			<!-- allows to configure a service area per drt mode.Used with serviceArea Operational Scheme -->
+			<!--			<param name="drtServiceAreaShapeFile" value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/berlin/berlin-v5.5-10pct/input/berlin-shp/berlin.shp" />-->
+			<!-- Beeline distance factor for DRT. Used in analyis and in plans file. The default value is 1.3. -->
+			<param name="estimatedBeelineDistanceFactor" value="1.3" />
+			<!-- Beeline-speed estimate for DRT. Used in analysis, optimisation constraints and in plans file, [m/s]. The default value is 25 km/h -->
+			<param name="estimatedDrtSpeed" value="8.333333333333334" />
+			<!-- Idle vehicles return to the nearest of all start links. See: DvrpVehicle.getStartLink() -->
+			<param name="idleVehiclesReturnToDepots" value="false" />
+			<!-- Defines the slope of the maxTravelTime estimation function (optimisation constraint), i.e. maxTravelTimeAlpha * estimated_drt_travel_time + maxTravelTimeBeta. Alpha should not be smaller than 1. -->
+			<param name="maxTravelTimeAlpha" value="1.7" />
+			<!-- Defines the shift of the maxTravelTime estimation function (optimisation constraint), i.e. maxTravelTimeAlpha * estimated_drt_travel_time + maxTravelTimeBeta. Beta should not be smaller than 0. -->
+			<param name="maxTravelTimeBeta" value="120.0" />
+			<!-- Max wait time for the bus to come (optimisation constraint). -->
+			<param name="maxWaitTime" value="300.0" />
+			<!-- Maximum beeline distance (in meters) to next stop location in stopbased system for access/egress walk leg to/from drt. If no stop can be found within this maximum distance will return a direct walk of type drtMode_walk. -->
+			<param name="maxWalkDistance" value="2000.0" />
+			<!-- Mode which will be handled by PassengerEngine and VrpOptimizer (passengers'/customers' perspective) -->
+			<param name="mode" value="ridesplitting" />
+			<!-- Number of threads used for parallel evaluation of request insertion into existing schedules. Scales well up to 4, due to path data provision, the most computationally intensive part, using up to 4 threads. Default value is 'min(4, no. of cores available to JVM)' -->
+			<param name="numberOfThreads" value="6" />
+			<!-- Operational Scheme, either of door2door, stopbased or serviceAreaBased. door2door by default -->
+			<param name="operationalScheme" value="door2door" />
+			<!-- If true, the max travel and wait times of a submitted request are considered hard constraints (the request gets rejected if one of the constraints is violated). If false, the max travel and wait times are considered soft constraints (insertion of a request that violates one of the constraints is allowed, but its cost is increased by additional penalty to make it relatively less attractive). Penalisation of insertions can be customised by injecting a customised InsertionCostCalculator.PenaltyCalculator -->
+			<param name="rejectRequestIfMaxWaitOrTravelTimeViolated" value="false" />
+
+			<!-- Bus stop duration. Must be positive. -->
+			<param name="stopDuration" value="60.0" />
+			<!-- Stop locations file (transit schedule format, but without lines) for DRT stops. Used only for the stopbased mode -->
+			<param name="transitStopFile" value="null" />
+			<!-- Limit the operation of vehicles to links (of the 'dvrp_routing' network) with 'allowedModes' containing this 'mode'. For backward compatibility, the value is set to false by default - this means that the vehicles are allowed to operate on all links of the 'dvrp_routing' network. The 'dvrp_routing' is defined by DvrpConfigGroup.networkModes) -->
+			<param name="useModeFilteredSubnetwork" value="true" />
+			<!-- An XML file specifying the vehicle fleet. The file format according to dvrp_vehicles_v1.dtd -->
+			<param name="vehiclesFile" value="taxi_4.xml" />
+			<!-- Writes out detailed DRT customer stats in each iteration. True by default. -->
+			<param name="writeDetailedCustomerStats" value="true" />
+
+			<!--<parameterset type="minCostFlowRebalancing">
+				<param name="targetAlpha" value="0.5"/>
+				<param name="targetBeta" value="0.5"/>
+				<param name="cellSize" value="2000"/>
+				<param name="interval" value="1800"/>
+
+			</parameterset>-->
+		</parameterset>
+	</module>
+
+	<module name="multiModeDrt">
+		<parameterset type="drt">
+			<!-- If true, the startLink is changed to last link in the current schedule, so the taxi starts the next day at the link where it stopped operating the day before. False by default. -->
+			<param name="changeStartLinkToLastLinkInSchedule" value="true" />
+			<!-- allows to configure a service area per drt mode.Used with serviceArea Operational Scheme -->
+			<!--			<param name="drtServiceAreaShapeFile" value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/berlin/berlin-v5.5-10pct/input/berlin-shp/berlin.shp" />-->
+			<!-- Beeline distance factor for DRT. Used in analyis and in plans file. The default value is 1.3. -->
+			<param name="estimatedBeelineDistanceFactor" value="1.3" />
+			<!-- Beeline-speed estimate for DRT. Used in analysis, optimisation constraints and in plans file, [m/s]. The default value is 25 km/h -->
+			<param name="estimatedDrtSpeed" value="8.333333333333334" />
+			<!-- Idle vehicles return to the nearest of all start links. See: DvrpVehicle.getStartLink() -->
+			<param name="idleVehiclesReturnToDepots" value="false" />
+			<!-- Defines the slope of the maxTravelTime estimation function (optimisation constraint), i.e. maxTravelTimeAlpha * estimated_drt_travel_time + maxTravelTimeBeta. Alpha should not be smaller than 1. -->
+			<param name="maxTravelTimeAlpha" value="1.7" />
+			<!-- Defines the shift of the maxTravelTime estimation function (optimisation constraint), i.e. maxTravelTimeAlpha * estimated_drt_travel_time + maxTravelTimeBeta. Beta should not be smaller than 0. -->
+			<param name="maxTravelTimeBeta" value="120.0" />
+			<!-- Max wait time for the bus to come (optimisation constraint). -->
+			<param name="maxWaitTime" value="300.0" />
+			<!-- Maximum beeline distance (in meters) to next stop location in stopbased system for access/egress walk leg to/from drt. If no stop can be found within this maximum distance will return a direct walk of type drtMode_walk. -->
+			<param name="maxWalkDistance" value="2000.0" />
+			<!-- Mode which will be handled by PassengerEngine and VrpOptimizer (passengers'/customers' perspective) -->
+			<param name="mode" value="ridesourcing" />
+			<!-- Number of threads used for parallel evaluation of request insertion into existing schedules. Scales well up to 4, due to path data provision, the most computationally intensive part, using up to 4 threads. Default value is 'min(4, no. of cores available to JVM)' -->
+			<param name="numberOfThreads" value="6" />
+			<!-- Operational Scheme, either of door2door, stopbased or serviceAreaBased. door2door by default -->
+			<param name="operationalScheme" value="door2door" />
+			<!-- If true, the max travel and wait times of a submitted request are considered hard constraints (the request gets rejected if one of the constraints is violated). If false, the max travel and wait times are considered soft constraints (insertion of a request that violates one of the constraints is allowed, but its cost is increased by additional penalty to make it relatively less attractive). Penalisation of insertions can be customised by injecting a customised InsertionCostCalculator.PenaltyCalculator -->
+			<param name="rejectRequestIfMaxWaitOrTravelTimeViolated" value="false" />
+
+			<!-- Bus stop duration. Must be positive. -->
+			<param name="stopDuration" value="60.0" />
+			<!-- Stop locations file (transit schedule format, but without lines) for DRT stops. Used only for the stopbased mode -->
+			<param name="transitStopFile" value="null" />
+			<!-- Limit the operation of vehicles to links (of the 'dvrp_routing' network) with 'allowedModes' containing this 'mode'. For backward compatibility, the value is set to false by default - this means that the vehicles are allowed to operate on all links of the 'dvrp_routing' network. The 'dvrp_routing' is defined by DvrpConfigGroup.networkModes) -->
+			<param name="useModeFilteredSubnetwork" value="true" />
+			<!-- An XML file specifying the vehicle fleet. The file format according to dvrp_vehicles_v1.dtd -->
+			<param name="vehiclesFile" value="taxi_1.xml" />
+			<!-- Writes out detailed DRT customer stats in each iteration. True by default. -->
+			<param name="writeDetailedCustomerStats" value="true" />
+
+			<!--<parameterset type="minCostFlowRebalancing">
+				<param name="targetAlpha" value="0.5"/>
+				<param name="targetBeta" value="0.5"/>
+				<param name="cellSize" value="2000"/>
+				<param name="interval" value="1800"/>
+
+			</parameterset>-->
+		</parameterset>
+	</module>
+	<module name="drtfares">
+		<!-- Define a parameterset for each drt mode where fares should be charged -->
+
+		<parameterset type="drtfare">
+			<!-- transport mode for which this fare applies. Default: drt -->
+			<param name="mode" value="ridesplitting"/>
+			<!-- Basefare per Trip (fare = positive value) -->
+			<param name="basefare" value="0.0"/>
+			<!-- Minimum fare per trip (paid instead of the sum of base, time and distance fare if that sum would be lower than the minimum fare, fee = positive value). -->
+			<param name="minFarePerTrip" value="2.0"/>
+			<!-- Daily subscription fee (fee = positive value) -->
+			<param name="dailySubscriptionFee" value="0.0"/>
+			<!-- drt fare per meter (fee = positive value) -->
+			<param name="distanceFare_m" value="0.0002"/>
+			<!-- drt fare per hour (fee = positive value) -->
+			<param name="timeFare_h" value="0.0"/>
+		</parameterset>
+	</module>
+	<module name="drtfares">
+		<!-- Define a parameterset for each drt mode where fares should be charged -->
+
+		<parameterset type="drtfare">
+			<!-- transport mode for which this fare applies. Default: drt -->
+			<param name="mode" value="ridesourcing"/>
+			<!-- Basefare per Trip (fare = positive value) -->
+			<param name="basefare" value="0.0"/>
+			<!-- Minimum fare per trip (paid instead of the sum of base, time and distance fare if that sum would be lower than the minimum fare, fee = positive value). -->
+			<param name="minFarePerTrip" value="4.0"/>
+			<!-- Daily subscription fee (fee = positive value) -->
+			<param name="dailySubscriptionFee" value="0.0"/>
+			<!-- drt fare per meter (fee = positive value) -->
+			<param name="distanceFare_m" value="0.00055"/>
+			<!-- drt fare per hour (fee = positive value) -->
+			<param name="timeFare_h" value="0.0"/>
+		</parameterset>
+	</module>
+
+	<module name="dvrp" >
+		<!-- Mode of which the network will be used for throwing events and hence calculating travel times. Default is car. -->
+		<param name="mobsimMode" value="car" />
+		<!-- Set of modes of which the network will be used for DVRP travel time estimation and routing DVRP vehicles. Each specific DVRP mode may use a subnetwork of this network for routing vehicles (e.g. DRT buses travelling only along a specified links or serving a limited area). Default is "car" (i.e. single-element set of modes), i.e. the car network is used. Empty value "" (i.e. empty set of modes) means no network filtering, i.e. the original scenario.network is used -->
+		<param name="networkModes" value="ridesourcing,ridesplitting" />
+		<!--<param name="networkModes" value="car" />-->
+		<!-- Used for OFFLINE estimation of travel times for VrpOptimizer by means of the exponential moving average. The weighting decrease, alpha, must be in (0,1]. We suggest small values of alpha, e.g. 0.05. The averaging starts from the initial travel time estimates. If not provided, the free-speed TTs is used as the initial estimates -->
+		<param name="travelTimeEstimationAlpha" value="0.05" />
+		<!-- Used for ONLINE estimation of travel times for VrpOptimizer by combining WithinDayTravelTime and DvrpOfflineTravelTimeEstimator. The beta coefficient is provided in seconds and should be either 0 (no online estimation) or positive (mixed online-offline estimation). For 'beta = 0', only the offline estimate is used: 'onlineTT(t) = offlineTT(t)', where 'offlineTT(t)' in the offline estimate for TT at time 't', For 'beta > 0', estimating future TTs at time 't', uses the currently observed TT to correct the offline estimates is made: where 'currentTT' is the currently observed TT, and 'correction = min(1, max(0, 1 - (time - currentTime) / beta))' The rule is that correction decreases linearly from 1 (when 'time = currentTime') to 0 (when 'time = currentTime + beta' For 'time > currentTime + beta' correction is 0, whereas if 'time < currentTime' it is 1. If beta is sufficiently large, 'beta >> 0', only the currently observed TT is used. -->
+		<param name="travelTimeEstimationBeta" value="0.0" />
+	</module>
+
+	<!--<module name="otfvis">
+		<param name="coloringScheme" value="taxicab" />
+		<param name="drawNonMovingItems" value="true" />
+	</module>-->
+
+</config>

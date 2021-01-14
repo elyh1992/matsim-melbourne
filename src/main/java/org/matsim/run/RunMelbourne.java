@@ -27,6 +27,7 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.ControlerConfigGroup.RoutingAlgorithmType;
 import org.matsim.core.config.groups.QSimConfigGroup.TrafficDynamics;
+import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
 import org.matsim.core.scenario.ScenarioUtils;
@@ -53,6 +54,14 @@ public class RunMelbourne {
 	
 	static Controler prepareControler(Scenario scenario) {
 		final Controler controler = new Controler(scenario);
+
+		/*MelbournePlanScoringFunctionFactory initialPlanScoringFuctionFactory = new MelbournePlanScoringFunctionFactory(controler.getScenario());
+		controler.addOverridingModule(new AbstractModule() {
+			@Override
+			public void install() {
+				this.bindScoringFunctionFactory().toInstance(initialPlanScoringFuctionFactory);
+			}
+		});*/
 
 		/*// add emissions:
 		controler.addOverridingModule(new AbstractModule() {
@@ -106,7 +115,7 @@ public class RunMelbourne {
 		} else {
 			// === default config start (if no config file provided)
 			
-			config = ConfigUtils.loadConfig("scenarios/2017-11-scenario-by-kai-from-vista/config.xml");
+			config = ConfigUtils.loadConfig("scenarios/2017-11-scenario-by-kai-from-vista/updated_config_without_drt.xml");
 			config.controler().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
 
 			/*config.controler().setLastIteration(5);

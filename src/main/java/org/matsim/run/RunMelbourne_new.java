@@ -20,11 +20,13 @@ package org.matsim.run;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.TransportMode;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigGroup;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.ControlerConfigGroup.RoutingAlgorithmType;
 import org.matsim.core.config.groups.QSimConfigGroup.TrafficDynamics;
+import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
 import org.matsim.core.scenario.ScenarioUtils;
@@ -44,7 +46,7 @@ public class RunMelbourne_new {
 		}
 
 		if ( args.length==0 ) {
-			args = new String[] {"scenarios/2017-11-scenario-by-kai-from-vista/config.xml"}  ;
+			args = new String[] {"scenarios/2017-11-scenario-by-kai-from-vista/updated_config_without_drt.xml"}  ;
 		}
 		// yyyyyy increase memory!
 
@@ -60,6 +62,21 @@ public class RunMelbourne_new {
 	
 	static Controler prepareControler(Scenario scenario) {
 		final Controler controler = new Controler(scenario);
+		MelbournePlanScoringFunctionFactory initialPlanScoringFuctionFactory = new MelbournePlanScoringFunctionFactory(controler.getScenario());
+		controler.addOverridingModule(new AbstractModule() {
+			@Override
+			public void install() {
+				this.bindScoringFunctionFactory().toInstance(initialPlanScoringFuctionFactory);
+			}
+		});
+
+		/*controler.addOverridingModule( new AbstractModule() {
+			@Override
+			public void install() {
+				addTravelTimeBinding( TransportMode.ride ).to( networkTravelTime() );
+				addTravelDisutilityFactoryBinding( TransportMode.ride ).to( carTravelDisutilityFactoryKey() );
+			}
+		} );*/
 
 
 		
@@ -92,8 +109,13 @@ public class RunMelbourne_new {
 		final Config config = ConfigUtils.loadConfig( args[ 0 ], customModulesAll );
 
 
-		
+		config.controler().setRoutingAlgorithmType( RoutingAlgorithmType.FastAStarLandmarks);
+
+
+		config.plansCalcRoute().setInsertingAccessEgressWalk(true);
+
 		config.qsim().setTrafficDynamics(TrafficDynamics.kinematicWaves);
+		/*config.plansCalcRoute().removeModeRoutingParams(TransportMode.ride);*/
 		
 
 		ConfigUtils.loadConfig(config,"overridingConfig.xml");
