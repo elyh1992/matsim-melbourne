@@ -343,54 +343,54 @@ final class CreateDemandFromVISTA_Elham<csvFormat> {
 			Activity newAct = populationFactory.createActivityFromCoord(actType, newActCoord);
 
 
-			if (!(currentFirstActType.equals(currentLastActType)))
-			{
-				//if the first act is home make the last act home too
-				if (currentFirstActType.equals("At or Go Home"))
-				{
-					actType = currentFirstAct.getType();
-					newActCoord = new Coord(currentFirstAct.getCoord().getX(), currentFirstAct.getCoord().getY());
-					newAct = populationFactory.createActivityFromCoord(actType, newActCoord);
-
-					Activity secondLast = (Activity) eachPlan.getPlanElements().get(NoOfPlans - 2);
-					String secondLastActType = secondLast.getType().toString().trim();
-
-
-					currentLastAct.setEndTime(secondLast.getEndTime() + 18000);
-					if (currentLastAct.getEndTime() > 129600)
-					{
-						System.out.println( eachPerson.getId());
-						currentLastAct.setEndTime(129600);
-					}
-
-					eachPlan.getPlanElements().add(populationFactory.createLeg(leg.getMode()));
-					eachPlan.getPlanElements().add(newAct);
-				}
-
-				// match the first act with last
-				else
-				{
-					actType = currentLastAct.getType();
-					newActCoord = new Coord(currentLastAct.getCoord().getX(), currentLastAct.getCoord().getY());
-					newAct = populationFactory.createActivityFromCoord(actType, newActCoord);
-					eachPlan.getPlanElements().add(0, newAct);
-					eachPlan.getPlanElements().add(1, populationFactory.createLeg(leg.getMode()));
-
-					Activity newFirstAct = (Activity) eachPlan.getPlanElements().get(0);
-					Activity timeRefAct = (Activity) eachPlan.getPlanElements().get(2);
-					String timeRefActType = timeRefAct.getType().toString().trim();
-
-
-					newFirstAct.setEndTime(timeRefAct.getEndTime() - 18000);
-
-					//if after the process start time of a trip is minus, it will be set to 04:00am which is the earliest travel in vista trips
-					if (newFirstAct.getEndTime() < 0)
-					{
-						System.out.println( eachPerson.getId());
-						newFirstAct.setEndTime(14400);
-					}
-				}
-			}
+//			if (!(currentFirstActType.equals(currentLastActType)))
+//			{
+//				//if the first act is home make the last act home too
+//				if (currentFirstActType.equals("At or Go Home"))
+//				{
+//					actType = currentFirstAct.getType();
+//					newActCoord = new Coord(currentFirstAct.getCoord().getX(), currentFirstAct.getCoord().getY());
+//					newAct = populationFactory.createActivityFromCoord(actType, newActCoord);
+//
+//					Activity secondLast = (Activity) eachPlan.getPlanElements().get(NoOfPlans - 2);
+//					String secondLastActType = secondLast.getType().toString().trim();
+//
+//
+//					currentLastAct.setEndTime(secondLast.getEndTime() + 18000);
+//					if (currentLastAct.getEndTime() > 129600)
+//					{
+//						System.out.println( eachPerson.getId());
+//						currentLastAct.setEndTime(129600);
+//					}
+//
+//					eachPlan.getPlanElements().add(populationFactory.createLeg(leg.getMode()));
+//					eachPlan.getPlanElements().add(newAct);
+//				}
+//
+//				// match the first act with last
+//				else
+//				{
+//					actType = currentLastAct.getType();
+//					newActCoord = new Coord(currentLastAct.getCoord().getX(), currentLastAct.getCoord().getY());
+//					newAct = populationFactory.createActivityFromCoord(actType, newActCoord);
+//					eachPlan.getPlanElements().add(0, newAct);
+//					eachPlan.getPlanElements().add(1, populationFactory.createLeg(leg.getMode()));
+//
+//					Activity newFirstAct = (Activity) eachPlan.getPlanElements().get(0);
+//					Activity timeRefAct = (Activity) eachPlan.getPlanElements().get(2);
+//					String timeRefActType = timeRefAct.getType().toString().trim();
+//
+//
+//					newFirstAct.setEndTime(timeRefAct.getEndTime() - 18000);
+//
+//					//if after the process start time of a trip is minus, it will be set to 04:00am which is the earliest travel in vista trips
+//					if (newFirstAct.getEndTime() < 0)
+//					{
+//						System.out.println( eachPerson.getId());
+//						newFirstAct.setEndTime(14400);
+//					}
+//				}
+//			}
 		}
 		System.out.println("matching done");
 

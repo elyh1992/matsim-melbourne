@@ -20,12 +20,13 @@ package org.matsim.run;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.av.robotaxi.fares.drt.DrtFaresConfigGroup;
+/*import org.matsim.contrib.av.robotaxi.fares.drt.DrtFaresConfigGroup;*/
 import org.matsim.contrib.drt.run.MultiModeDrtConfigGroup;
 import org.matsim.contrib.dvrp.run.DvrpConfigGroup;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.ControlerConfigGroup.RoutingAlgorithmType;
+import org.matsim.core.config.groups.PlansCalcRouteConfigGroup;
 import org.matsim.core.config.groups.QSimConfigGroup.TrafficDynamics;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
@@ -129,8 +130,11 @@ public class RunMelbourne {
 		// === everything from here on applies to _all_ runs, that is, it overrides the base config.
 		
 		config.controler().setRoutingAlgorithmType( RoutingAlgorithmType.FastAStarLandmarks);
-		
-		config.plansCalcRoute().setInsertingAccessEgressWalk(true);
+
+		/*added part*/
+		config.plansCalcRoute().setAccessEgressType(PlansCalcRouteConfigGroup.AccessEgressType.accessEgressModeToLink);
+		/*config.plansCalcRoute().setInsertingAccessEgressWalk(true);*/
+
 		
 	/*	{
 			StrategySettings stratSets = new StrategySettings( ) ;

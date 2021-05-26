@@ -43,7 +43,7 @@ public class KSRunMelbourne {
 		
 		config.controler().setRoutingAlgorithmType( ControlerConfigGroup.RoutingAlgorithmType.FastAStarLandmarks);
 		
-		config.plansCalcRoute().setInsertingAccessEgressWalk(true);
+		/*config.plansCalcRoute().setInsertingAccessEgressWalk(true);*/
 		
 		{
 			StrategyConfigGroup.StrategySettings stratSets = new StrategyConfigGroup.StrategySettings( ) ;

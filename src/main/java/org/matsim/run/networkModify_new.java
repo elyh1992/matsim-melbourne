@@ -19,11 +19,11 @@ public class networkModify_new {
    public static void main(String[] args) {
        Network network = NetworkUtils.createNetwork();
        NetworkFactory factory	= network.getFactory();
-       new MatsimNetworkReader(network).readFile("C:/Users/ehajhashemi/Desktop/Files/MATSim codes/matsim-melbourne/scenarios/2017-11-scenario-by-kai-from-vista/net-HOV.xml");
+       new MatsimNetworkReader(network).readFile("C:/Users/ehajhashemi/Desktop/Files/MATSim codes/matsim-melbourne/scenarios/2017-11-scenario-by-kai-from-vista/net-HOV-30.xml");
 
 
        List<String[]> rowList = new ArrayList<String[]>();
-       try (BufferedReader br = new BufferedReader(new FileReader("C:/Users/ehajhashemi/Desktop/HOV links.csv"))) {
+       try (BufferedReader br = new BufferedReader(new FileReader("C:/Users/ehajhashemi/Desktop/links used by ridesplitting_30.csv"))) {
            String line;
            while ((line = br.readLine()) != null) {
                String[] lineItems = line.split(",");
@@ -95,7 +95,7 @@ public class networkModify_new {
 
 
 
-       new NetworkWriter(network).write("C:/Users/ehajhashemi/Desktop/Files/MATSim codes/matsim-melbourne/scenarios/2017-11-scenario-by-kai-from-vista/net-HOV.xml");
+       new NetworkWriter(network).write("C:/Users/ehajhashemi/Desktop/Files/MATSim codes/matsim-melbourne/scenarios/2017-11-scenario-by-kai-from-vista/net-HOV-30.xml");
 
     }
 

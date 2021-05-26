@@ -298,7 +298,7 @@ public class ZahraCreateDemandGmelb {
 			Activity newAct = populationFactory.createActivityFromCoord(actType, newActCoord);
 			
 			
-			if (!(currentFirstActType.equals(currentLastActType)))
+	/*		if (!(currentFirstActType.equals(currentLastActType)))
 			{
 				//if the first act is home make the last act home too
 				if (currentFirstActType.equals("2"))
@@ -356,7 +356,7 @@ public class ZahraCreateDemandGmelb {
 						newFirstAct.setEndTime(14400);
 					}
 				}	
-			}
+			}*/
 		}
 		System.out.println("matching done");
 	}

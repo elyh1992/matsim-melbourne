@@ -112,13 +112,14 @@ public class RunMelbourne_new {
 		config.controler().setRoutingAlgorithmType( RoutingAlgorithmType.FastAStarLandmarks);
 
 
-		config.plansCalcRoute().setInsertingAccessEgressWalk(true);
+		/*config.plansCalcRoute().setInsertingAccessEgressWalk(true);*/
 
 		config.qsim().setTrafficDynamics(TrafficDynamics.kinematicWaves);
 		/*config.plansCalcRoute().removeModeRoutingParams(TransportMode.ride);*/
-		
+
 
 		ConfigUtils.loadConfig(config,"overridingConfig.xml");
+
 		return config;
 	}
 	

@@ -384,7 +384,7 @@ public class ZahraCreateDemandCopy {
 			Activity newAct = populationFactory.createActivityFromCoord(actType, newActCoord);
 			
 			
-			if (!(currentFirstActType.equals(currentLastActType)))
+			/*if (!(currentFirstActType.equals(currentLastActType)))
 			{
 				//if the first act is home make the last act home too
 				if (currentFirstActType.equals("1"))
@@ -440,7 +440,7 @@ public class ZahraCreateDemandCopy {
 						newFirstAct.setEndTime(14400);
 					}
 				}	
-			}
+			}*/
 		}
 		System.out.println("matching done");
 	}

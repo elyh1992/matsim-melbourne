@@ -18,6 +18,7 @@
  * *********************************************************************** */
 package org.matsim.run;
 
+/*
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.av.robotaxi.fares.drt.DrtFareModule;
@@ -35,10 +36,12 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.vis.otfvis.OTFVisConfigGroup;
 
 
+*/
 /**
  * @author nagel
  *
- */
+ *//*
+
 public class RunMelbourne_drt {
 	private static final String drt_CONFIG = "scenarios/2017-11-scenario-by-kai-from-vista/config_drt.xml";
 	public static void run(Config config, boolean otfvis) {
@@ -68,3 +71,4 @@ public class RunMelbourne_drt {
 
 	
 }
+*/

@@ -20,8 +20,8 @@ package org.matsim.run;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.contrib.av.robotaxi.fares.drt.DrtFareModule;
-import org.matsim.contrib.av.robotaxi.fares.drt.DrtFaresConfigGroup;
+/*import org.matsim.contrib.av.robotaxi.fares.drt.DrtFareModule;
+import org.matsim.contrib.av.robotaxi.fares.drt.DrtFaresConfigGroup;*/
 import org.matsim.contrib.drt.routing.DrtRoute;
 import org.matsim.contrib.drt.routing.DrtRouteFactory;
 import org.matsim.contrib.drt.run.DrtConfigs;
@@ -53,12 +53,16 @@ public class RunMelbourne_multi_drt {
 		}
 
 		if ( args.length==0 ) {
-			args = new String[] {"scenarios/2017-11-scenario-by-kai-from-vista/updated_config_drt.xml"}  ;
+			/*args = new String[] {"scenarios/2017-11-scenario-by-kai-from-vista/updated_config_all_ridesourcing.xml"}  ;*/
+			/*args = new String[] {"scenarios/2017-11-scenario-by-kai-from-vista/updated_config_drt.xml"}  ;*/
+			/*args = new String[] {"scenarios/2017-11-scenario-by-kai-from-vista/updated_config_ridesourcing_ridesplitting.xml"}  ;*/
+			args = new String[] {"scenarios/2017-11-scenario-by-kai-from-vista/updated_config_ridesourcing_ridesplitting_RMIT.xml"}  ;
 		}
 		// yyyyyy increase memory!
 
 		Config config = prepareConfig(args);
 		config.controler().setOverwriteFileSetting(OverwriteFileSetting.deleteDirectoryIfExists);
+
 
 		Scenario scenario = prepareScenario(config);
 
@@ -73,7 +77,7 @@ public class RunMelbourne_multi_drt {
 		controler.addOverridingModule(new MultiModeDrtModule());
 		controler.addOverridingModule(new DvrpModule());
 		controler.configureQSimComponents(DvrpQSimComponents.activateAllModes(MultiModeDrtConfigGroup.get(controler.getConfig())));
-		controler.addOverridingModule(new DrtFareModule());
+		/*controler.addOverridingModule(new DrtFareModule());*/
 
 	/*	MelbournePlanScoringFunctionFactory initialPlanScoringFuctionFactory = new MelbournePlanScoringFunctionFactory(controler.getScenario());
 		controler.addOverridingModule(new AbstractModule() {
@@ -100,7 +104,8 @@ public class RunMelbourne_multi_drt {
 	}
 
 	static Config prepareConfig(String[] args) {
-		Config config = RunMelbourne_new.prepareConfig(args, new MultiModeDrtConfigGroup(), new DvrpConfigGroup(), new DrtFaresConfigGroup() ) ;
+		Config config = RunMelbourne_new.prepareConfig(args, new MultiModeDrtConfigGroup(), new DvrpConfigGroup() ) ;
+		/*Config config = RunMelbourne_new.prepareConfig(args, new MultiModeDrtConfigGroup(), new DvrpConfigGroup(), new DrtFaresConfigGroup() ) ;*/
 
 		DrtConfigs.adjustMultiModeDrtConfig(MultiModeDrtConfigGroup.get(config), config.planCalcScore(), config.plansCalcRoute());
 
