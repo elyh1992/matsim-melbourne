@@ -4,13 +4,14 @@
 
 	<!-- ====================================================================== -->
 	<module name="network" >
-		<param name="inputNetworkFile" value="net.xml" />
+		<!--<param name="inputNetworkFile" value="net.xml" />-->
+		<param name="inputNetworkFile" value="net-updated-cn.xml" />
 	</module>
 	<!-- ====================================================================== -->
 	<module name="plans" >
 		<!--<param name="inputPlansFile" value="plans-file-new-29-nov.xml.gz" />-->
-		<!--<param name="inputPlansFile" value="final_last_plan_MEL.xml" />-->
-		<param name="inputPlansFile" value="output_plans.xml" />
+		<param name="inputPlansFile" value="final_last_plan_MEL.xml" />
+		<!--<param name="inputPlansFile" value="output_plans.xml" />-->
 	</module>
 
 
@@ -20,7 +21,7 @@
 		<param name="storageCapacityFactor" value="0.05" />
 		<param name="startTime" value="00:00:00" />
 		<param name="endTime" value="36:00:00" />
-
+		<param name="numberOfThreads" value="8" />
 		<param name="simStarttimeInterpretation" value="onlyUseStarttime"/>
 		<param name="insertingWaitingVehiclesBeforeDrivingVehicles"
 			   value="true" />
@@ -28,14 +29,15 @@
 		<param name = "snapshotStyle"	value = "queue"/>
 	</module>
 	<module name="global" >
-		<param name="numberOfThreads" value="6" />
+		<param name="numberOfThreads" value="8" />
 	</module>
 	<!-- ====================================================================== -->
 	<module name="controler" >
-		<param name="overwriteFiles" value="deleteDirectoryIfExists" />
+		<!--<param name="overwriteFiles" value="deleteDirectoryIfExists" />-->
+		<param name="outputDirectory" value="./output_regular_extended_access_egress/" />
 		<param name="firstIteration" value="0" />
-		<param name="lastIteration" value="100" />
-		<param name="writeEventsInterval" value="5" />
+		<param name="lastIteration" value="10" />
+		<param name="writeEventsInterval" value="10" />
 	</module>
 
 

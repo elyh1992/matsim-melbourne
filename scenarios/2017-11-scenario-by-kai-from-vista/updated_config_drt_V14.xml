@@ -31,7 +31,7 @@
 	<!-- ====================================================================== -->
 	<module name="controler" >
 		<!--<param name="overwriteFiles" value="deleteDirectoryIfExists" />-->
-		<param name="outputDirectory" value="./test_output_4_fin_HOV_in_mat12/" />
+		<param name="outputDirectory" value="./test_output_4_fin_HOV_in_mat14/" />
 		<param name="firstIteration" value="0" />
 		<param name="lastIteration" value="10" />
 		<param name="writeEventsInterval" value="10" />
@@ -386,14 +386,15 @@
 	</module>
 	<module name="multiModeDrt">
 		<parameterset type="drt">
+			<parameterset type="ExtensiveInsertionSearch"/>
 			<!-- If true, the startLink is changed to last link in the current schedule, so the taxi starts the next day at the link where it stopped operating the day before. False by default. -->
 			<param name="changeStartLinkToLastLinkInSchedule" value="true" />
 			<!-- allows to configure a service area per drt mode.Used with serviceArea Operational Scheme -->
 			<!--			<param name="drtServiceAreaShapeFile" value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/berlin/berlin-v5.5-10pct/input/berlin-shp/berlin.shp" />-->
 			<!-- Beeline distance factor for DRT. Used in analyis and in plans file. The default value is 1.3. -->
-			<param name="estimatedBeelineDistanceFactor" value="1.3" />
+			<!--<param name="estimatedBeelineDistanceFactor" value="1.3" />-->
 			<!-- Beeline-speed estimate for DRT. Used in analysis, optimisation constraints and in plans file, [m/s]. The default value is 25 km/h -->
-			<param name="estimatedDrtSpeed" value="8.333333333333334" />
+			<!--<param name="estimatedDrtSpeed" value="8.333333333333334" />-->
 			<!-- Idle vehicles return to the nearest of all start links. See: DvrpVehicle.getStartLink() -->
 			<param name="idleVehiclesReturnToDepots" value="false" />
 			<!-- Defines the slope of the maxTravelTime estimation function (optimisation constraint), i.e. maxTravelTimeAlpha * estimated_drt_travel_time + maxTravelTimeBeta. Alpha should not be smaller than 1. -->
@@ -407,7 +408,7 @@
 			<!-- Mode which will be handled by PassengerEngine and VrpOptimizer (passengers'/customers' perspective) -->
 			<param name="mode" value="ridesplitting" />
 			<!-- Number of threads used for parallel evaluation of request insertion into existing schedules. Scales well up to 4, due to path data provision, the most computationally intensive part, using up to 4 threads. Default value is 'min(4, no. of cores available to JVM)' -->
-			<param name="numberOfThreads" value="6" />
+			<param name="numberOfThreads" value="8" />
 			<!-- Operational Scheme, either of door2door, stopbased or serviceAreaBased. door2door by default -->
 			<param name="operationalScheme" value="door2door" />
 			<!-- If true, the max travel and wait times of a submitted request are considered hard constraints (the request gets rejected if one of the constraints is violated). If false, the max travel and wait times are considered soft constraints (insertion of a request that violates one of the constraints is allowed, but its cost is increased by additional penalty to make it relatively less attractive). Penalisation of insertions can be customised by injecting a customised InsertionCostCalculator.PenaltyCalculator -->
@@ -418,33 +419,40 @@
 			<!-- Stop locations file (transit schedule format, but without lines) for DRT stops. Used only for the stopbased mode -->
 			<param name="transitStopFile" value="null" />
 			<!-- Limit the operation of vehicles to links (of the 'dvrp_routing' network) with 'allowedModes' containing this 'mode'. For backward compatibility, the value is set to false by default - this means that the vehicles are allowed to operate on all links of the 'dvrp_routing' network. The 'dvrp_routing' is defined by DvrpConfigGroup.networkModes) -->
-			<param name="useModeFilteredSubnetwork" value="true" />
-			<!--<param name="useModeFilteredSubnetwork" value="false" />-->
+			<param name="useModeFilteredSubnetwork" value="false" />
 			<!-- An XML file specifying the vehicle fleet. The file format according to dvrp_vehicles_v1.dtd -->
+			<!--<param name="vehiclesFile" value="taxi_4_10000.xml" />-->
 			<param name="vehiclesFile" value="taxi_4_1000.xml" />
 			<!-- Writes out detailed DRT customer stats in each iteration. True by default. -->
 			<param name="writeDetailedCustomerStats" value="true" />
+			<parameterset type="drtfare">
+				<!-- transport mode for which this fare applies. Default: drt -->
+				<!-- Basefare per Trip (fare = positive value) -->
+				<param name="basefare" value="0.0"/>
+				<!-- Minimum fare per trip (paid instead of the sum of base, time and distance fare if that sum would be lower than the minimum fare, fee = positive value). -->
+				<param name="minFarePerTrip" value="1.0"/>
+				<!-- Daily subscription fee (fee = positive value) -->
+				<param name="dailySubscriptionFee" value="0.0"/>
+				<!-- drt fare per meter (fee = positive value) -->
+				<param name="distanceFare_m" value="0.0001"/>
+				<!-- drt fare per hour (fee = positive value) -->
+				<param name="timeFare_h" value="0.0"/>
+			</parameterset>
 
-			<!--<parameterset type="minCostFlowRebalancing">
-				<param name="targetAlpha" value="0.5"/>
-				<param name="targetBeta" value="0.5"/>
-				<param name="cellSize" value="2000"/>
-				<param name="interval" value="1800"/>
-
-			</parameterset>-->
 		</parameterset>
 	</module>
 
 	<module name="multiModeDrt">
 		<parameterset type="drt">
+			<parameterset type="ExtensiveInsertionSearch"/>
 			<!-- If true, the startLink is changed to last link in the current schedule, so the taxi starts the next day at the link where it stopped operating the day before. False by default. -->
 			<param name="changeStartLinkToLastLinkInSchedule" value="true" />
 			<!-- allows to configure a service area per drt mode.Used with serviceArea Operational Scheme -->
 			<!--			<param name="drtServiceAreaShapeFile" value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/berlin/berlin-v5.5-10pct/input/berlin-shp/berlin.shp" />-->
 			<!-- Beeline distance factor for DRT. Used in analyis and in plans file. The default value is 1.3. -->
-			<param name="estimatedBeelineDistanceFactor" value="1.3" />
+			<!--<param name="estimatedBeelineDistanceFactor" value="1.3" />-->
 			<!-- Beeline-speed estimate for DRT. Used in analysis, optimisation constraints and in plans file, [m/s]. The default value is 25 km/h -->
-			<param name="estimatedDrtSpeed" value="8.333333333333334" />
+			<!--<param name="estimatedDrtSpeed" value="8.333333333333334" />-->
 			<!-- Idle vehicles return to the nearest of all start links. See: DvrpVehicle.getStartLink() -->
 			<param name="idleVehiclesReturnToDepots" value="false" />
 			<!-- Defines the slope of the maxTravelTime estimation function (optimisation constraint), i.e. maxTravelTimeAlpha * estimated_drt_travel_time + maxTravelTimeBeta. Alpha should not be smaller than 1. -->
@@ -458,7 +466,7 @@
 			<!-- Mode which will be handled by PassengerEngine and VrpOptimizer (passengers'/customers' perspective) -->
 			<param name="mode" value="ridesourcing" />
 			<!-- Number of threads used for parallel evaluation of request insertion into existing schedules. Scales well up to 4, due to path data provision, the most computationally intensive part, using up to 4 threads. Default value is 'min(4, no. of cores available to JVM)' -->
-			<param name="numberOfThreads" value="6" />
+			<param name="numberOfThreads" value="8" />
 			<!-- Operational Scheme, either of door2door, stopbased or serviceAreaBased. door2door by default -->
 			<param name="operationalScheme" value="door2door" />
 			<!-- If true, the max travel and wait times of a submitted request are considered hard constraints (the request gets rejected if one of the constraints is violated). If false, the max travel and wait times are considered soft constraints (insertion of a request that violates one of the constraints is allowed, but its cost is increased by additional penalty to make it relatively less attractive). Penalisation of insertions can be customised by injecting a customised InsertionCostCalculator.PenaltyCalculator -->
@@ -469,58 +477,30 @@
 			<!-- Stop locations file (transit schedule format, but without lines) for DRT stops. Used only for the stopbased mode -->
 			<param name="transitStopFile" value="null" />
 			<!-- Limit the operation of vehicles to links (of the 'dvrp_routing' network) with 'allowedModes' containing this 'mode'. For backward compatibility, the value is set to false by default - this means that the vehicles are allowed to operate on all links of the 'dvrp_routing' network. The 'dvrp_routing' is defined by DvrpConfigGroup.networkModes) -->
-			<!--<param name="useModeFilteredSubnetwork" value="false" />-->
-			<param name="useModeFilteredSubnetwork" value="true" />
+			<param name="useModeFilteredSubnetwork" value="false" />
 			<!-- An XML file specifying the vehicle fleet. The file format according to dvrp_vehicles_v1.dtd -->
+			<!--<param name="vehiclesFile" value="taxi_1_10000.xml" />-->
 			<param name="vehiclesFile" value="taxi_1_1000.xml" />
 			<!-- Writes out detailed DRT customer stats in each iteration. True by default. -->
 			<param name="writeDetailedCustomerStats" value="true" />
+			<parameterset type="drtfare">
+				<!-- transport mode for which this fare applies. Default: drt -->
+				<!--<param name="mode" value="ridesourcing"/>-->
+				<!-- Basefare per Trip (fare = positive value) -->
+				<param name="basefare" value="0.0"/>
+				<!-- Minimum fare per trip (paid instead of the sum of base, time and distance fare if that sum would be lower than the minimum fare, fee = positive value). -->
+				<param name="minFarePerTrip" value="4.0"/>
+				<!-- Daily subscription fee (fee = positive value) -->
+				<param name="dailySubscriptionFee" value="0.0"/>
+				<!-- drt fare per meter (fee = positive value) -->
+				<param name="distanceFare_m" value="0.00055"/>
+				<!-- drt fare per hour (fee = positive value) -->
+				<param name="timeFare_h" value="0.0"/>
+			</parameterset>
 
-			<!--<parameterset type="minCostFlowRebalancing">
-				<param name="targetAlpha" value="0.5"/>
-				<param name="targetBeta" value="0.5"/>
-				<param name="cellSize" value="2000"/>
-				<param name="interval" value="1800"/>
-
-			</parameterset>-->
 		</parameterset>
 	</module>
-	<module name="drtfares">
-		<!-- Define a parameterset for each drt mode where fares should be charged -->
 
-		<parameterset type="drtfare">
-			<!-- transport mode for which this fare applies. Default: drt -->
-			<param name="mode" value="ridesplitting"/>
-			<!-- Basefare per Trip (fare = positive value) -->
-			<param name="basefare" value="0.0"/>
-			<!-- Minimum fare per trip (paid instead of the sum of base, time and distance fare if that sum would be lower than the minimum fare, fee = positive value). -->
-			<param name="minFarePerTrip" value="2.0"/>
-			<!-- Daily subscription fee (fee = positive value) -->
-			<param name="dailySubscriptionFee" value="0.0"/>
-			<!-- drt fare per meter (fee = positive value) -->
-			<param name="distanceFare_m" value="0.0002"/>
-			<!-- drt fare per hour (fee = positive value) -->
-			<param name="timeFare_h" value="0.0"/>
-		</parameterset>
-	</module>
-	<module name="drtfares">
-		<!-- Define a parameterset for each drt mode where fares should be charged -->
-
-		<parameterset type="drtfare">
-			<!-- transport mode for which this fare applies. Default: drt -->
-			<param name="mode" value="ridesourcing"/>
-			<!-- Basefare per Trip (fare = positive value) -->
-			<param name="basefare" value="0.0"/>
-			<!-- Minimum fare per trip (paid instead of the sum of base, time and distance fare if that sum would be lower than the minimum fare, fee = positive value). -->
-			<param name="minFarePerTrip" value="4.0"/>
-			<!-- Daily subscription fee (fee = positive value) -->
-			<param name="dailySubscriptionFee" value="0.0"/>
-			<!-- drt fare per meter (fee = positive value) -->
-			<param name="distanceFare_m" value="0.00055"/>
-			<!-- drt fare per hour (fee = positive value) -->
-			<param name="timeFare_h" value="0.0"/>
-		</parameterset>
-	</module>
 
 	<module name="dvrp" >
 		<!-- Mode of which the network will be used for throwing events and hence calculating travel times. Default is car. -->

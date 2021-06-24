@@ -20,6 +20,8 @@ package org.matsim.run;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.contrib.drt.run.MultiModeDrtConfigGroup;
+import org.matsim.contrib.dvrp.run.DvrpConfigGroup;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigGroup;
 import org.matsim.core.config.ConfigUtils;
@@ -78,10 +80,11 @@ public class RunMelbourne_new_RMIT {
 		}
 
 		config.controler().setRoutingAlgorithmType( RoutingAlgorithmType.FastAStarLandmarks);
-		/*config.plansCalcRoute().setInsertingAccessEgressWalk(true);*/
+		config.plansCalcRoute().setInsertingAccessEgressWalk(true);
 		config.qsim().setTrafficDynamics(TrafficDynamics.kinematicWaves);
 		ConfigUtils.loadConfig(config,"overridingConfig.xml");
 		return config;
 	}
-	
+
+
 }

@@ -132,8 +132,8 @@ public class RunMelbourne {
 		config.controler().setRoutingAlgorithmType( RoutingAlgorithmType.FastAStarLandmarks);
 
 		/*added part*/
-		config.plansCalcRoute().setAccessEgressType(PlansCalcRouteConfigGroup.AccessEgressType.accessEgressModeToLink);
-		/*config.plansCalcRoute().setInsertingAccessEgressWalk(true);*/
+		/*config.plansCalcRoute().setAccessEgressType(PlansCalcRouteConfigGroup.AccessEgressType.accessEgressModeToLink);*/
+		config.plansCalcRoute().setInsertingAccessEgressWalk(true);
 
 		
 	/*	{

@@ -25,6 +25,7 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigGroup;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.ControlerConfigGroup.RoutingAlgorithmType;
+import org.matsim.core.config.groups.PlansCalcRouteConfigGroup;
 import org.matsim.core.config.groups.QSimConfigGroup.TrafficDynamics;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
@@ -62,13 +63,13 @@ public class RunMelbourne_new {
 	
 	static Controler prepareControler(Scenario scenario) {
 		final Controler controler = new Controler(scenario);
-		MelbournePlanScoringFunctionFactory initialPlanScoringFuctionFactory = new MelbournePlanScoringFunctionFactory(controler.getScenario());
+		/*MelbournePlanScoringFunctionFactory initialPlanScoringFuctionFactory = new MelbournePlanScoringFunctionFactory(controler.getScenario());
 		controler.addOverridingModule(new AbstractModule() {
 			@Override
 			public void install() {
 				this.bindScoringFunctionFactory().toInstance(initialPlanScoringFuctionFactory);
 			}
-		});
+		});*/
 
 		/*controler.addOverridingModule( new AbstractModule() {
 			@Override
@@ -110,9 +111,11 @@ public class RunMelbourne_new {
 
 
 		config.controler().setRoutingAlgorithmType( RoutingAlgorithmType.FastAStarLandmarks);
+		/*config.plansCalcRoute().setAccessEgressType(PlansCalcRouteConfigGroup.AccessEgressType.accessEgressModeToLink);*/
 
 
-		/*config.plansCalcRoute().setInsertingAccessEgressWalk(true);*/
+
+		config.plansCalcRoute().setInsertingAccessEgressWalk(true);
 
 		config.qsim().setTrafficDynamics(TrafficDynamics.kinematicWaves);
 		/*config.plansCalcRoute().removeModeRoutingParams(TransportMode.ride);*/
